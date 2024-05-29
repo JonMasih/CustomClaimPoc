@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 
 
@@ -35,14 +36,12 @@ namespace CustomClaimsPOC3
 
             //authorizeReqest token 
             //validate the access token send by Microsoft ENT id
+             var BodyReader = new StreamReader(req.Body);
+            var reqbody = await BodyReader.ReadToEndAsync();
+            
+            TokenClaimsExtensionRequest data = Newtonsoft.Json.JsonConvert.DeserializeObject<TokenClaimsExtensionRequest>(reqbody);
 
-
-            using var bodyReader = new StreamReader(req.Body);
-            var reqBody = await bodyReader.ReadToEndAsync();
-
-
-
-            if (reqBody == null)
+            if (data == null)
             {
                 return req.CreateResponse(HttpStatusCode.BadRequest);
             }
@@ -50,58 +49,31 @@ namespace CustomClaimsPOC3
             {
                 try
                 {
-                    var tokenClaimsExtensionRequest = JsonSerializer.Deserialize<TokenClaimsExtensionRequest>(reqBody);
-                
-
-                    if (tokenClaimsExtensionRequest != null)
+                    string correlationId = data?.data.AuthenticationContext?.correlationId ?? string.Empty;
+                    if (correlationId != null)
                     {
-                        string correlationId = tokenClaimsExtensionRequest?.Data.AuthenticationContext?.CorrelationId ?? string.Empty;
-                        if (correlationId != null)
-                        {
+                        
+ 
+                        // Read the correlation ID from the Microsoft Entra request    
+                        // Claims to return to Microsoft Entra
+                        ExtendedTokenClaimsResponse r = new ExtendedTokenClaimsResponse();
+                        r.data.actions[0].claims.correlationId = correlationId;
 
-                            ExtendedTokenClaimsResponse extendedTokenClaimsResponse = new ExtendedTokenClaimsResponse
-                                {
-                                Data = new()
-                                {
-                                    Actions = [
-                                                 new()
-                                                 {
-                                                     Claims = new()
-                                                     {
-                                                         // Read the correlation ID from the Azure AD request    
-                                                         CorrelationId = correlationId,
-                                                         ApiVersion = "1.0.0",
-                                                         DateOfBirth = "01/01/2000",
-                                                         CustomRoles =
-                                                            [
-                                                                "Writer",
-                                                                "Editor"
-                                                            ]
-                                                     }
-                                                 }
-                                                ]
-                                }
-                            };
+                        //look up database for partner access
 
 
 
-
-                            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
-                            //response.Headers.Add("Content-Type", "application/json");
-                            //response.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json;charset=UTF-8");
-                            //response.Body = new MemoryStream(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(extendedTokenClaimsResponse)));
-
-                            await response.WriteAsJsonAsync(extendedTokenClaimsResponse);
-
-                         //   _logger.LogInformation("End reqest, " + JsonSerializer.Serialize<HttpResponseData>(response));
-
-                            return response;
-
-                        }
-
+                        r.data.actions[0].claims.partnerName = "Belong health"; 
+                        r.data.actions[0].claims.groupAccess.Add("490643");
+                        r.data.actions[0].claims.lobAccess.Add("MC44");
+                        r.data.actions[0].claims.tinAccess.Add("490643");
+                        r.data.actions[0].claims.customRoles.Add("Reader");
+                        r.data.actions[0].claims.customRoles.Add("Editor");
+                        HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
+                        await response.WriteAsJsonAsync(r);
+                        return response;
                     }
-                   return req.CreateResponse(HttpStatusCode.BadRequest);
-                  
+                    return req.CreateResponse(HttpStatusCode.BadRequest);
                 }
                 catch (Exception ex)
                 {
@@ -113,8 +85,7 @@ namespace CustomClaimsPOC3
                 }
 
             }
-
         }
-
     }
-}
+
+  }

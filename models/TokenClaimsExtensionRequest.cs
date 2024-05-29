@@ -3,129 +3,131 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+
 
 namespace CustomClaimsPOC3.models
 {
     public class TokenClaimsExtensionRequest
     {
-        [JsonPropertyName("type")]
+       [JsonProperty("type")]
         public string? Type { get; set; }
 
-        [JsonPropertyName("source")]
+        [JsonProperty("source")]
         public string? Source { get; set; }
 
-        [JsonPropertyName("data")]
-        public RequestData? Data { get; set; }
+        [JsonProperty("data")]
+        public RequestData? data { get; set; }
     }
 
     public class RequestData
     {
-        [JsonPropertyName("@odata.type")]
+       [JsonProperty("@odata.type")]
         public string? ODatatype { get; set; }
 
-        [JsonPropertyName("tenantId")]
+        [JsonProperty("tenantId")]
         public string? TenantId { get; set; }
 
-        [JsonPropertyName("authenticationEventListenerId")]
+        [JsonProperty("authenticationEventListenerId")]
         public string? AuthenticationEventListenerId { get; set; }
 
-        [JsonPropertyName("customAuthenticationExtensionId")]
+        [JsonProperty("customAuthenticationExtensionId")]
         public string? CustomAuthenticationExtensionId { get; set; }
 
-        [JsonPropertyName("authenticationContext")]
+        [JsonProperty("authenticationContext")]
         public AuthenticationContext? AuthenticationContext { get; set; }
     }
 
     public class AuthenticationContext
     {
-        [JsonPropertyName("correlationId")]
-        public string? CorrelationId { get; set; }
+        [JsonProperty("correlationId")]
+        public string? correlationId { get; set; }
 
-        [JsonPropertyName("client")]
+        [JsonProperty("client")]
         public Client? Client { get; set; }
 
-        [JsonPropertyName("protocol")]
+        [JsonProperty("protocol")]
         public string? Protocol { get; set; }
 
-        [JsonPropertyName("clientServicePrincipal")]
+        [JsonProperty("clientServicePrincipal")]
         public ClientServicePrincipal? ClientServicePrincipal { get; set; }
 
-        [JsonPropertyName("resourceServicePrincipal")]
+        [JsonProperty("resourceServicePrincipal")]
         public ResourceServicePrincipal? ResourceServicePrincipal { get; set; }
 
-        [JsonPropertyName("user")]
+        [JsonProperty("user")]
         public User? User { get; set; }
     }
 
     public class Client
     {
-        [JsonPropertyName("ip")]
+        [JsonProperty("ip")]
         public string? Ip { get; set; }
 
-        [JsonPropertyName("locale")]
+        [JsonProperty("locale")]
         public string? Locale { get; set; }
 
-        [JsonPropertyName("market")]
+        [JsonProperty("market")]
         public string? Market { get; set; }
     }
 
     public class ClientServicePrincipal
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public string? Id { get; set; }
 
-        [JsonPropertyName("appId")]
+        [JsonProperty("appId")]
         public string? AppId { get; set; }
 
-        [JsonPropertyName("appDisplayName")]
+        [JsonProperty("appDisplayName")]
         public string? AppDisplayName { get; set; }
 
-        [JsonPropertyName("displayName")]
+        [JsonProperty("displayName")]
         public string? DisplayName { get; set; }
     }
 
     public class ResourceServicePrincipal
     {
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public string? Id { get; set; }
 
-        [JsonPropertyName("appId")]
+        [JsonProperty("appId")]
         public string? AppId { get; set; }
 
-        [JsonPropertyName("appDisplayName")]
+        [JsonProperty("appDisplayName")]
         public string? AppDisplayName { get; set; }
 
-        [JsonPropertyName("displayName")]
+        [JsonProperty("displayName")]
         public string? DisplayName { get; set; }
     }
 
     public class User
     {
-        [JsonPropertyName("createdDateTime")]
+        [JsonProperty("createdDateTime")]
         public DateTime CreatedDateTime { get; set; }
 
-        [JsonPropertyName("displayName")]
+        [JsonProperty("displayName")]
         public string? DisplayName { get; set; }
 
-        [JsonPropertyName("givenName")]
+        [JsonProperty("givenName")]
         public string? GivenName { get; set; }
 
-        [JsonPropertyName("id")]
+        [JsonProperty("id")]
         public string? Id { get; set; }
 
-        [JsonPropertyName("mail")]
+        [JsonProperty("mail")]
         public string? Mail { get; set; }
 
-        [JsonPropertyName("preferredLanguage")]
+        [JsonProperty("preferredLanguage")]
         public string? PreferredLanguage { get; set; }
 
-        [JsonPropertyName("surname")]
+        [JsonProperty("surname")]
         public string? Surname { get; set; }
 
-        [JsonPropertyName("userPrincipalName")]
+        [JsonProperty("userPrincipalName")]
         public string? UserPrincipalName { get; set; }
 
-        [JsonPropertyName("userType")]
+        [JsonProperty("userType")]
         public string? UserType { get; set; }
     }
 }
