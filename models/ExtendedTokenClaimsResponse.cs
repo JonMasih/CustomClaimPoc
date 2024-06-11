@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace CustomClaimsPOC3.models
 {
@@ -18,7 +18,7 @@ public class ExtendedTokenClaimsResponse
 }
 public class Data
     {
-     [JsonPropertyName("@odata.type")]
+    [JsonProperty("@odata.type")]
     public string odatatype { get; set; }
     public List<Action> actions { get; set; }
     public Data()
@@ -30,7 +30,8 @@ public class Data
 }
 public class Action
 {
-     [JsonPropertyName("@odata.type")]
+  
+    [JsonProperty("@odata.type")]
     public string odatatype { get; set; }
     public Claims claims { get; set; }
     public Action()
